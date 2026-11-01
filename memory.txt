@@ -1,0 +1,139 @@
+================================================================================
+HOMELAB:MONITOR - SYSTEM MEMORY & HOMESERVER PROFILE
+================================================================================
+Generated: 2026-10-03 21:52:00 +07:00
+Last Verified Via SSH: 2026-10-03 21:51:33 +07:00
+
+1. HOMESERVER CREDENTIALS & ACCESS
+--------------------------------------------------------------------------------
+Host IP:           192.168.1.115
+SSH Port:          22
+SSH User:          wannuwat
+SSH Password:      091981
+Hostname:          wannuwat-HP-EliteBook-8440p
+Hardware Model:    HP EliteBook 8440p
+Operating System:  Zorin OS Lite (Ubuntu 24.04 LTS based)
+Kernel Version:    7.0.0-30-generic #30~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC x86_64
+
+2. HARDWARE SPECIFICATIONS & STATUS
+--------------------------------------------------------------------------------
+CPU:               Intel(R) Core(TM) i5 CPU M 540 @ 2.53GHz (2 cores, 4 threads)
+Memory (RAM):      2827 MiB total
+                   - Used: ~981 MiB
+                   - Available / Headroom: ~1846 MiB
+                   - Buff/Cache: ~1463 MiB
+Swap:              5119 MiB total (303 MiB used, 4816 MiB free)
+Storage:           /dev/sda3 mounted on / (228 GB total, 45 GB used [21%], 172 GB available)
+
+3. HOST DIRECTORY MAP & PROJECT PATHS (/home/wannuwat/)
+--------------------------------------------------------------------------------
+/home/wannuwat/
+├── music-library/          # Shogunify Backend (Gunicorn + Flask/SQLite)
+│   ├── app_latest.py       # Active backend application
+│   ├── app.py              # Legacy / bridge entrypoint
+│   ├── music.db            # SQLite database for users, songs, playlists
+│   ├── album_art/          # Cover images
+│   ├── songs/              # Audio files
+│   ├── previews/           # Song preview clips
+│   ├── schema.sql          # DB schema definition
+│   └── venv/               # Python virtual environment
+├── line-print-server/      # LINE Bot Print Server (Flask)
+│   ├── app.py              # Print processing application
+│   ├── .env                # LINE Bot secrets & tokens
+│   ├── incoming/           # Temporary received files (.pdf, .docx, images)
+│   ├── flask.log           # Application logs
+│   └── venv/               # Python virtual environment
+├── .cloudflared/           # Cloudflare Tunnel Configuration
+│   ├── config.yml          # Ingress routing rules & tunnel definition
+│   └── *.json              # Tunnel credentials
+├── ineffa-server/          # Ineffa backend (memory_server.py)
+├── ineffa-data/            # Ineffa data directory
+├── minecraft-server/       # Local Minecraft server instance
+├── minecraft_backups/      # Automated/manual Minecraft world backups
+├── WannuwatBackups/        # Server data backups
+├── FlashDriveBackups/      # External drive mirror backups
+└── qdrant_storage/         # Vector DB storage (root owned)
+
+4. SYSTEMD SERVICES & EXECUTION DETAILS
+--------------------------------------------------------------------------------
+Service 1: Shogunify (Music Library)
+- Unit Name:         music-library.service
+- Unit File:         /etc/systemd/system/music-library.service
+- Status:            Active (Running)
+- Working Directory: /home/wannuwat/music-library
+- Environment:       SHOGUNIFY_INVITE_CODE=WelCoMeTo_ShoGuNiFy
+- Exec Command:      /home/wannuwat/music-library/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8091 --timeout 120 app_latest:app
+- Local Port:        127.0.0.1:8091
+- Concurrency:       Up to 300 concurrent users (highly optimized + cached)
+- Ingress Domains:   music.wannuwatbot.com, music-test.wannuwatbot.com
+
+Service 2: LINE Print Server
+- Unit Name:         line-print-flask.service
+- Unit File:         /etc/systemd/system/line-print-flask.service
+- Status:            Active (Running)
+- Working Directory: /home/wannuwat/line-print-server
+- Exec Command:      /home/wannuwat/line-print-server/venv/bin/python3 -u app.py
+- Local Port:        127.0.0.1:5000
+- Function:          Receives documents from LINE bot, prompts user for settings, prints to CUPS, cleans up.
+- Ingress Domain:    print.wannuwatbot.com
+
+Service 3: CUPS Print Scheduler
+- Unit Names:        cups.service, cups-browsed.service
+- Status:            Active (Running)
+- Function:          Underlying Linux printing subsystem
+
+Service 4: Cloudflare Tunnel Daemon
+- Unit Name:         line-print-tunnel.service
+- Unit File:         /etc/systemd/system/line-print-tunnel.service
+- Exec Command:      /usr/bin/cloudflared tunnel --config /home/wannuwat/.cloudflared/config.yml run line-print-server
+- Status:            Active (Running)
+
+Service 5: Playit Tunnel
+- Unit Name:         playit.service
+- Status:            Active (Running)
+- Function:          Tunneling agent for Minecraft server
+
+5. CLOUDFLARE INGRESS MAPPINGS (/home/wannuwat/.cloudflared/config.yml)
+--------------------------------------------------------------------------------
+Domain: wannuwatbot.com (Registered via AtomHost Thailand)
+Tunnel Name:  line-print-server
+Tunnel ID:    bfd7ce32-893c-4a67-9fc8-9e94e107c45b
+Routes:
+  - print.wannuwatbot.com       -> http://localhost:5000
+  - music-test.wannuwatbot.com  -> http://localhost:8090
+  - music.wannuwatbot.com       -> http://localhost:8091
+  - monitor.wannuwatbot.com     -> http://localhost:8095   (HomeLab:Monitor FastAPI - Active / Deployed)
+  - catch-all                   -> http_status:404
+
+6. HOMELAB:MONITOR PROJECT REPOSITORY PATHS (Local Workstation)
+--------------------------------------------------------------------------------
+Workspace:
+/home/wannuwat_s/Desktop/HomeLab:Monitor/
+├── markdowns/
+│   ├── requirements/
+│   │   └── 2026-10-03_21-43-04.md     # Master XML-tagged Requirements & Architecture
+│   ├── updates/
+│   │   ├── 2026-10-03_21-43-33.md     # Session 1 Changelog & Discovery Log
+│   │   └── 2026-10-03_22-28-55.md     # Session 2 Changelog: Flutter App Build & Icons
+│   └── future_features/
+│       └── 2026-10-03_21-43-27.md     # Backlog: WebSockets, Remote Restarts, Speedtest
+├── app/                               # Complete Flutter client codebase
+└── memory.txt                         # This persistent context profile
+
+7. HOMELAB:MONITOR APP DESIGN & CONFIGURATION
+--------------------------------------------------------------------------------
+App Name:          HomeLab:Monitor
+Backend Tech:      FastAPI (Python), Target RAM: <40 MB
+Frontend Tech:     Flutter (Android Native App)
+Security:          Pre-shared static API key via header `X-API-Key`
+Theme:             Cloudflare Dark Violet
+  - Background:          #222222
+  - Cards/Surface:       #2A2A2E
+  - Borders:             #483D73
+  - Highlight/Primary:   #9384D1
+  - Online/Healthy:      #10B981
+  - Warning/Memory Pres: #F59E0B
+  - Offline/Alert:       #EF4444
+Refresh Method:    Phase 1: REST Polling (3-5s) + Pull-to-Refresh
+                   Phase 2: Persistent WebSockets (`wss://`)
+================================================================================

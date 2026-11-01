@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Shogunify v4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background glow matching Shogunify's purple brand theme */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(147, 132, 209, 0.18) 0%, rgba(72, 61, 115, 0.08) 50%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      background: #1b1b1b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 620px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(10px);
+    }
+
+    /* Brand Header aligned identically to the app's Drawer Row */
+    .drawer-brand-header {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 30px;
+      transform: translateX(-120px);
+    }
+
+    /* Outer container with 16px border-radius and white border with 0.3 opacity */
+    .drawer-logo-container {
+      width: 65px;
+      height: 65px;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      padding: 0;
+      overflow: hidden;
+      flex-shrink: 0;
+      background-color: rgb(25, 25, 25);
+    }
+
+    /* Inner image with 14px border-radius */
+    .drawer-logo-container img {
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Column layout next to logo */
+    .drawer-brand-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .drawer-brand-text .brand-title {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .drawer-brand-text .brand-version {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    /* Title strictly on one line */
+    h1.title {
+      font-size: clamp(20px, 3.8vw, 27px);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 32px;
+      white-space: nowrap;
+    }
+
+    /* Purple download button */
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 340px;
+      height: 56px;
+      background-color: #9384d1;
+      color: #121212;
+      font-family: 'Kanit', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(147, 132, 209, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .btn-download:hover {
+      background-color: #a496db;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(147, 132, 209, 0.5);
+    }
+
+    .btn-download:active {
+      transform: translateY(0);
+      background-color: #7c4dff;
+      color: #ffffff;
+    }
+
+    .btn-download svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    @media (max-width: 520px) {
+      .container {
+        padding: 36px 20px;
+      }
+      .drawer-brand-header {
+        transform: translateX(-16px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Brand header aligned exactly like the app's drawer -->
+    <div class="drawer-brand-header">
+      <div class="drawer-logo-container">
+        <img src="/Icon6.jpg" alt="shogunify" onerror="this.src='assets/images/Icon6.jpg'">
+      </div>
+      <div class="drawer-brand-text">
+        <span class="brand-title">shogunify</span>
+        <span class="brand-version">v1.0.4</span>
+      </div>
+    </div>
+
+    <!-- Title in one single line -->
+    <h1 class="title">Download Shogunify v4(เว้บชั่วคราว)</h1>
+
+    <!-- Purple Download Button -->
+    <a href="/download/apk" download="Shogunify-v4.apk" class="btn-download">
+      <svg viewBox="0 0 24 24">
+        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+      </svg>
+      ดาวน์โหลด (APK)
+    </a>
+
+    <p class="footer-note">สำหรับ Android • ไฟล์ APK</p>
+  </div>
+
+</body>
+</html>
